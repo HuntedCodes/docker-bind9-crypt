@@ -1,0 +1,22 @@
+// Local zone configuration.
+
+//include "/etc/bind/zones.rfc1918";  // Reserved private ranges.
+
+
+acl "internals" {
+    any;
+};
+
+
+view "internal" {
+    match-clients { internals; };
+
+    allow-query { internals; };
+    allow-recursion { any; };
+
+    forwarders { 8.8.4.4; };  // Google DNS
+    //forwarders { 208.67.222.222; };  // OpenDNS
+    //forward only;  // Ignores local zones, cache, and recursion.
+
+    include "/data/bind/etc/named.conf.default-zones";
+};
