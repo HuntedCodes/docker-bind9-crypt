@@ -9,3 +9,5 @@ bootstrap_salt.sh
 
 squid/cache
 squid/log
+test
+*.log

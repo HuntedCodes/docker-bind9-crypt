@@ -1,17 +1,20 @@
 version: '3'
 services:
-  bind9:
+  bind9-crypt:
     # docker-compose settings
     build: .
-    container_name: bind9
+    container_name: bind9-crypt
     # docker swarm settings
     deploy:
       replicas: 1
       placement:
         constraints: [node.role == manager]
     # general settings
-    image: bind9
+    image: bind9-crypt
+    environment:
+      - DNS_FORWARDER=dnscrypt
     ports:
       - "53:53/udp"
     volumes:
       - ./bind9:/data/bind
+      - ./dnscrypt:/data/dnscrypt

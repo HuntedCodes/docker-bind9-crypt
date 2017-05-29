@@ -1,0 +1,5 @@
+// Google DNS
+forwarders {
+    8.8.8.8 port 53;
+    8.8.4.4 port 53;
+};
