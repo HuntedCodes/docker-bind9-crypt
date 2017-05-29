@@ -14,7 +14,7 @@ view "internal" {
     allow-query { internals; };
     allow-recursion { internals; };
 
-    include "/data/bind/etc/named.conf.forwarders";
+    include "/data/bind/etc/forwarders/enabled_forwarder";
     //forward only;  // Ignores local zones, cache, and recursion.
 
     include "/data/bind/etc/named.conf.default-zones";

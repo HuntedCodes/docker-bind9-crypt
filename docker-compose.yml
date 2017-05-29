@@ -13,6 +13,8 @@ services:
     image: bind9-crypt
     environment:
       - DNS_FORWARDER=dnscrypt
+      #- DNS_FORWARDER=google
+      #- DNS_FORWARDER=none
     ports:
       - "53:53/udp"
     volumes:

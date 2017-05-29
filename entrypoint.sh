@@ -19,8 +19,8 @@ fi;
 # Link DNSCrypt and BIND config
 echo "[*] Forwarding DNS to: [$DNS_FORWARDER]"
 ln -sf \
-  "/data/bind/etc/named.conf.forwarders.$DNS_FORWARDER" \
-  "/data/bind/etc/named.conf.forwarders"
+  "/data/bind/etc/forwarders/$DNS_FORWARDER" \
+  "/data/bind/etc/forwarders/enabled_forwarder"
 
 # Start BIND
 echo "[*] Starting BIND Nameserver"
