@@ -10,9 +10,10 @@ RUN apt-get update -y && \
       dnscrypt-proxy dnscrypt-proxy-plugins && \
     apt-get clean
 
-# Copy init script
+# Copy init and blacklist script
 COPY entrypoint.sh /data/entrypoint.sh
-RUN chmod +x /data/entrypoint.sh
+COPY blacklist_update.sh /data/blacklist_update.sh
+RUN chmod +x /data/entrypoint.sh /data/blacklist_update.sh
 
 # BIND
 RUN ln -sf /data/bind/etc/named.conf /etc/bind/named.conf

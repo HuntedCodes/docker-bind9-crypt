@@ -6,7 +6,7 @@ acl "internals" {
   any;
 };
 
-view "internal" {
+view "testview" {
   match-clients { internals; };
 
   allow-query { internals; };
@@ -17,6 +17,5 @@ view "internal" {
   include "/data/bind/etc/enabled_forwarder";
 
   include "/data/bind/etc/zones/default-zones";
-
   include "/data/bind/etc/master_blacklist";
 };

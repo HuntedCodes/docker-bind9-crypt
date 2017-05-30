@@ -1,10 +1,8 @@
 #!/bin/sh
 
-LOG_DIR="/data/bind/log";
-if [ ! -d "$LOG_DIR" ]; then mkdir -p $LOG_DIR && chown bind $LOG_DIR; fi
-
 if [ -z $DNS_FORWARDER ]; then DNS_FORWARDER="none"; fi
 if [ -z $DNS_BLACKHOLE ]; then DNS_BLACKHOLE="null"; fi
+
 
 # DNSCrypt config
 if [ "$DNS_FORWARDER" = "dnscrypt" ]; then
@@ -22,30 +20,18 @@ if [ "$DNS_FORWARDER" = "dnscrypt" ]; then
 fi;
 
 
+# Files and folders
+BLACKLIST_DIR="/data/bind/etc/blacklist.d";
+if [ ! -d "$BLACKLIST_DIR" ]; then mkdir -p $BLACKLIST_DIR; fi
+chown -R bind $BLACKLIST_DIR
+LOG_DIR="/data/bind/log";
+if [ ! -d "$LOG_DIR" ]; then mkdir -p $LOG_DIR; fi
+touch $LOG_DIR/default.log
+touch $LOG_DIR/query.log
 
-MASTER_FILE="/data/bind/etc/master_blacklist"
-BLACKLIST_PATH="/data/bind/etc/blacklist.d"
 
-# Update yoyo DNS blacklist
-echo "[*] Updating yoyo DNS blacklist"
-YOYO_FILE="$BLACKLIST_PATH/yoyo"
-wget -O $YOYO_FILE "https://pgl.yoyo.org/as/serverlist.php?hostformat=nohtml&showintro=0"
-
-# Merge blacklists
-echo "[*] Merging DNS blacklists"
-for BLACKLIST_FILE in $(ls $BLACKLIST_PATH); do
-  cat "$BLACKLIST_PATH/$BLACKLIST_FILE" >> "$MASTER_FILE.tmp"
-done;
-sort -u "$MASTER_FILE.tmp" | sed -r \
-  "s/(.*)/zone \"\1\" { type master; notify no; file \"\/data\/bind\/etc\/zones\/blackhole\"; };/g" \
-   > "$MASTER_FILE"
-rm "$MASTER_FILE.tmp"
-
-# Blacklist permissions
-chown -R bind $BLACKLIST_PATH
-chmod 775 $BLACKLIST_PATH
-chmod 664 $BLACKLIST_PATH/*
-
+# Update the DNS blacklist
+/data/blacklist_update.sh
 
 
 # Link forwarder
@@ -54,9 +40,11 @@ ln -sf \
   "/data/bind/etc/forwarders/$DNS_FORWARDER" \
   "/data/bind/etc/enabled_forwarder"
 
+
 # Configure blackhole zone
 echo "[*] Blackhole to: [$DNS_BLACKHOLE]"
 cat "/data/bind/etc/zones/blackhole_template" | sed -r "s/XXXXXXXX/$DNS_BLACKHOLE/g" > "/data/bind/etc/zones/blackhole"
+
 
 # Permissions
 chown -R bind /data/bind/etc
@@ -70,7 +58,10 @@ chown -R bind /data/bind/etc/zones
 chmod 775 /data/bind/etc/zones
 chmod 664 /data/bind/etc/zones/*
 
-chmod 775 /data/bind/log
+chown -R bind $LOG_DIR
+chmod 775 $LOG_DIR
+chmod 666 $LOG_DIR/*
+
 
 # Start BIND
 echo "[*] Starting BIND Nameserver"

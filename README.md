@@ -23,13 +23,16 @@ some other host you designate for analysis or notification purposes.
 Advertising and malicious host blacklists are gathered, collated, and
 de-dupicated from the following sources:
 
-- https://hosts-file.net/ad_servers.txt
-- https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
-- https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
+- https://pgl.yoyo.org/as/
 - https://zeustracker.abuse.ch/blocklist.php?download=domainblocklist
 - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+- https://hosts-file.net/ad_servers.txt
 - https://mirror1.malwaredomains.com/files/justdomains
 - http://sysctl.org/cameleon/hosts
+
+Having too many records in the black list will slow down the DNS server. By
+default, only the yoyo and zeustracker lists are included. To enable more,
+look at the `blacklist_update.sh` script.
 
 
 ## Logging

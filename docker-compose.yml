@@ -3,20 +3,23 @@ services:
   bind9-crypt:
     # docker-compose settings
     build: .
-    container_name: bind9-crypt
+    container_name: permtest
     # docker swarm settings
     deploy:
       replicas: 1
       placement:
         constraints: [node.role == manager]
     # general settings
-    image: bind9-crypt
+    image: permtest
     environment:
       - DNS_FORWARDER=none
-      #- DNS_FORWARDER=dnscrypt
-      #- DNS_FORWARDER=google
-      - DNS_BLACKHOLE=8.8.8.8
-      #- DNS_BLACKHOLE=null
+      - DNS_BLACKHOLE=127.0.0.1
+      - ENABLE_YOYO=1
+      - ENABLE_ZEUSTRACKER=1
+      - ENABLE_MALWAREDOMAINS=1
+      - ENABLE_HOSTSFILE=0
+      - ENABLE_CAMELEON=0
+      - ENABLE_STEVENBLACK=0
     ports:
       - "53:53/udp"
     volumes:
