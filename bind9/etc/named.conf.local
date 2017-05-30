@@ -15,9 +15,8 @@ view "internal" {
   allow-update { none; };
 
   include "/data/bind/etc/enabled_forwarder";
-  //forward only;  // Ignores local zones, cache, and recursion.
 
   include "/data/bind/etc/zones/default-zones";
+
   include "/data/bind/etc/blacklists/yoyo";
-  //include "/data/bind/etc/blacklists/test";
 };

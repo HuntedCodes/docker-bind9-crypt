@@ -1,4 +1,4 @@
-; BIND zone that points all addresses to localhost.
+; BIND zone that points all addresses to null.
 
 
 $TTL 86400; one day
@@ -12,5 +12,5 @@ $TTL 86400; one day
                               86400 )       ; min ttl  1 day
 
                       NS      ns.blackhole.
-                      A       127.0.0.1
-*              IN     A       127.0.0.1
+                      A       XXXXXXXX
+*              IN     A       XXXXXXXX

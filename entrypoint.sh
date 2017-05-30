@@ -26,7 +26,7 @@ echo "[*] Updating yoyo DNS blacklist"
 YOYO_FILE="/data/bind/etc/blacklists/yoyo"
 wget -O- \
   "https://pgl.yoyo.org/adservers/serverlist.php?hostformat=bindconfig&showintro=0&mimetype=plaintext" \
-  | sed -r 's/null\.zone\.file/\/data\/bind\/etc\/enabled_blackhole/g' > $YOYO_FILE
+  | sed -r 's/null\.zone\.file/\/data\/bind\/etc\/zones\/blackhole/g' > $YOYO_FILE
 
 # Link forwarder
 echo "[*] Forwarding DNS to: [$DNS_FORWARDER]"
@@ -34,11 +34,9 @@ ln -sf \
   "/data/bind/etc/forwarders/$DNS_FORWARDER" \
   "/data/bind/etc/enabled_forwarder"
 
-# Link blackhole zone
-echo "[*] Blackhole zone to: [$DNS_BLACKHOLE]"
-ln -sf \
-  "/data/bind/etc/blackhole_zones/$DNS_BLACKHOLE" \
-  "/data/bind/etc/enabled_blackhole"
+# Configure blackhole zone
+echo "[*] Blackhole to: [$DNS_BLACKHOLE]"
+cat "/data/bind/etc/zones/blackhole_template" | sed -r "s/XXXXXXXX/$DNS_BLACKHOLE/g" > "/data/bind/etc/zones/blackhole"
 
 # Permissions
 chown -R bind /data/bind/etc
@@ -47,10 +45,6 @@ chmod 775 /data/bind/etc
 chown -R bind /data/bind/etc/blacklists
 chmod 775 /data/bind/etc/blacklists
 chmod 664 /data/bind/etc/blacklists/*
-
-chown -R bind /data/bind/etc/blackhole_zones
-chmod 775 /data/bind/etc/blackhole_zones
-chmod 664 /data/bind/etc/blackhole_zones/*
 
 chown -R bind /data/bind/etc/forwarders
 chmod 775 /data/bind/etc/forwarders

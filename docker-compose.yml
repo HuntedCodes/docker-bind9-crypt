@@ -15,7 +15,7 @@ services:
       - DNS_FORWARDER=none
       #- DNS_FORWARDER=dnscrypt
       #- DNS_FORWARDER=google
-      - DNS_BLACKHOLE=local
+      - DNS_BLACKHOLE=8.8.8.8
       #- DNS_BLACKHOLE=null
     ports:
       - "53:53/udp"
