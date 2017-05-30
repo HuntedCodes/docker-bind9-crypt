@@ -30,3 +30,10 @@ de-dupicated from the following sources:
 - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
 - https://mirror1.malwaredomains.com/files/justdomains
 - http://sysctl.org/cameleon/hosts
+
+
+## Logging
+
+Logging can be configured in `bind9/etc/named.conf.logging`. The default is to
+log queries to `bind9/log/queries.log` and everything else to
+`bind9/log/default.log`.
