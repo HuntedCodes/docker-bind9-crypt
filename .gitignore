@@ -7,7 +7,6 @@ bootstrap_salt.sh
 *.qcow2
 *.sw*
 
-squid/cache
-squid/log
 test
+bind/log
 *.log
