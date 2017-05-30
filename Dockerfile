@@ -4,13 +4,11 @@ MAINTAINER Jack Sullivan
 # Install packages
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
+      wget ca-certificates \
+      procps dnsutils \
       bind9 \
-      dnscrypt-proxy \
-      dnscrypt-proxy-plugins && \
+      dnscrypt-proxy dnscrypt-proxy-plugins && \
     apt-get clean
-
-# Diagnostic packages
-RUN apt-get install -y procps dnsutils
 
 # Copy init script
 COPY entrypoint.sh /data/entrypoint.sh
