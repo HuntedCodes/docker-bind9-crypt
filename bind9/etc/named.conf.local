@@ -2,20 +2,22 @@
 
 //include "/etc/bind/zones.rfc1918";  // Reserved private ranges.
 
-
 acl "internals" {
-    any;
+  any;
 };
 
-
 view "internal" {
-    match-clients { internals; };
+  match-clients { internals; };
 
-    allow-query { internals; };
-    allow-recursion { internals; };
+  allow-query { internals; };
+  allow-recursion { internals; };
+  allow-transfer { none; };
+  allow-update { none; };
 
-    include "/data/bind/etc/forwarders/enabled_forwarder";
-    //forward only;  // Ignores local zones, cache, and recursion.
+  include "/data/bind/etc/enabled_forwarder";
+  //forward only;  // Ignores local zones, cache, and recursion.
 
-    include "/data/bind/etc/named.conf.default-zones";
+  include "/data/bind/etc/zones/default-zones";
+  include "/data/bind/etc/blacklists/yoyo";
+  //include "/data/bind/etc/blacklists/test";
 };

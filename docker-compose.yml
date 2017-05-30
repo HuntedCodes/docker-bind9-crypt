@@ -12,9 +12,11 @@ services:
     # general settings
     image: bind9-crypt
     environment:
-      - DNS_FORWARDER=dnscrypt
+      - DNS_FORWARDER=none
+      #- DNS_FORWARDER=dnscrypt
       #- DNS_FORWARDER=google
-      #- DNS_FORWARDER=none
+      - DNS_BLACKHOLE=local
+      #- DNS_BLACKHOLE=null
     ports:
       - "53:53/udp"
     volumes:
