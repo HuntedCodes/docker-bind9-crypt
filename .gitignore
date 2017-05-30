@@ -12,3 +12,4 @@ bind/log
 *.log
 enabled_blackhole
 enabled_forwarder
+blackhole
