@@ -6,10 +6,13 @@ bootstrap_salt.sh
 *.img
 *.qcow2
 *.sw*
+*.tmp
 
 test
 bind/log
 *.log
+*.log.*
 enabled_blackhole
 enabled_forwarder
 blackhole
+master_blacklist

@@ -18,5 +18,5 @@ view "internal" {
 
   include "/data/bind/etc/zones/default-zones";
 
-  include "/data/bind/etc/blacklists/yoyo";
+  include "/data/bind/etc/master_blacklist";
 };

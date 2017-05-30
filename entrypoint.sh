@@ -21,12 +21,32 @@ if [ "$DNS_FORWARDER" = "dnscrypt" ]; then
   /usr/sbin/dnscrypt-proxy /data/dnscrypt/dnscrypt-proxy.conf;
 fi;
 
+
+
+MASTER_FILE="/data/bind/etc/master_blacklist"
+BLACKLIST_PATH="/data/bind/etc/blacklist.d"
+
 # Update yoyo DNS blacklist
 echo "[*] Updating yoyo DNS blacklist"
-YOYO_FILE="/data/bind/etc/blacklists/yoyo"
-wget -O- \
-  "https://pgl.yoyo.org/adservers/serverlist.php?hostformat=bindconfig&showintro=0&mimetype=plaintext" \
-  | sed -r 's/null\.zone\.file/\/data\/bind\/etc\/zones\/blackhole/g' > $YOYO_FILE
+YOYO_FILE="$BLACKLIST_PATH/yoyo"
+wget -O $YOYO_FILE "https://pgl.yoyo.org/as/serverlist.php?hostformat=nohtml&showintro=0"
+
+# Merge blacklists
+echo "[*] Merging DNS blacklists"
+for BLACKLIST_FILE in $(ls $BLACKLIST_PATH); do
+  cat "$BLACKLIST_PATH/$BLACKLIST_FILE" >> "$MASTER_FILE.tmp"
+done;
+sort -u "$MASTER_FILE.tmp" | sed -r \
+  "s/(.*)/zone \"\1\" { type master; notify no; file \"\/data\/bind\/etc\/zones\/blackhole\"; };/g" \
+   > "$MASTER_FILE"
+rm "$MASTER_FILE.tmp"
+
+# Blacklist permissions
+chown -R bind $BLACKLIST_PATH
+chmod 775 $BLACKLIST_PATH
+chmod 664 $BLACKLIST_PATH/*
+
+
 
 # Link forwarder
 echo "[*] Forwarding DNS to: [$DNS_FORWARDER]"
@@ -41,10 +61,6 @@ cat "/data/bind/etc/zones/blackhole_template" | sed -r "s/XXXXXXXX/$DNS_BLACKHOL
 # Permissions
 chown -R bind /data/bind/etc
 chmod 775 /data/bind/etc
-
-chown -R bind /data/bind/etc/blacklists
-chmod 775 /data/bind/etc/blacklists
-chmod 664 /data/bind/etc/blacklists/*
 
 chown -R bind /data/bind/etc/forwarders
 chmod 775 /data/bind/etc/forwarders
