@@ -1,0 +1,14 @@
+; BIND zone for clients, VLAN 1003
+
+
+$TTL 86400; one day
+
+;name     ttl  class  type  data
+@              IN     SOA   ns1.client.lan.  admin.client.lan. (
+                              2017053100    ; serial number YYMMDDNN
+                              28800         ; refresh  8 hours
+                              7200          ; retry    2 hours
+                              864000        ; expire  10 days
+                              86400 )       ; min ttl  1 day
+
+                      NS      ns1.client.lan.

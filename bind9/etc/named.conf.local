@@ -16,6 +16,11 @@ view "testview" {
 
   include "/data/bind/etc/enabled_forwarder";
 
+  zone "client.lan" {
+    type master;
+    file "/data/bind/etc/zones/client.lan";
+  };
+
   include "/data/bind/etc/zones/default-zones";
   include "/data/bind/etc/master_blacklist";
 };
